@@ -39,6 +39,8 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().setTitle("facelocker");
+
         //EditText와 Button을 초기화
         number = findViewById(R.id.number);
         password = findViewById(R.id.password);
@@ -46,7 +48,7 @@ public class login extends AppCompatActivity {
         personList = new ArrayList<>();
 
         //웹 서버에서 데이터 가져오기
-        getData("http://192.168.219.102/connection.php");
+        getData("http://facelocker.dothome.co.kr/login.php");
 
         login2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +58,7 @@ public class login extends AppCompatActivity {
 
                 if (id.isEmpty() || pw.isEmpty()) {
                     // 아이디와 비밀번호를 입력하지 않은 경우
-                    Toast.makeText(getApplicationContext(), "아이디(학번) 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     // DB에 있는 정보와 비교하여 로그인 처리
                     if (checkCredentials(id, pw)) {
@@ -66,7 +68,7 @@ public class login extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         // 로그인 실패 시의 동작
-                        Toast.makeText(getApplicationContext(), "아이디(학번) 또는 비밀번호를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

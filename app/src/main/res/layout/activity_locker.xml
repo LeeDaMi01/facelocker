@@ -6,4 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".locker">
 
+    <ImageView
+        android:id="@+id/square1"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/blank_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/square2"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/full_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="72dp"
+        android:text="사용 가능"
+        android:textColor="@color/black"
+        android:textSize='17dp'
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="72dp"
+        android:text="사용중"
+        android:textColor="@color/black"
+        android:textSize='17dp'
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,8 +22,6 @@ public class main extends AppCompatActivity {
 
         //액션바 이름
         getSupportActionBar().setTitle("facelocker");
-        //액션바에 뒤로가기 버튼
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
@@ -74,7 +72,7 @@ public class main extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.setting_action) {
-            startActivity(new Intent(this, log.class));
+            startActivity(new Intent(this, SettingActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
