@@ -9,7 +9,7 @@ import android.preference.SwitchPreference;
 public class SettingActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
     SwitchPreference switchPreference;
-    SwitchPreference switchPreference1; // 추가된 SwitchPreference
+    SwitchPreference switchPreference1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class SettingActivity extends PreferenceActivity implements Preference.On
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        // 필요한 경우 다른 설정에 대한 처리를 추가합니다.
+
         return true;
     }
 }
