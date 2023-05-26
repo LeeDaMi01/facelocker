@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/first_logo"
-        android:layout_width="241dp"
-        android:layout_height="252dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="104dp"
+        android:layout_width="213dp"
+        android:layout_height="192dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="148dp"
         android:src="@drawable/logo1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +21,7 @@
         android:layout_width="136dp"
         android:layout_height="52dp"
         android:layout_marginStart="136dp"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="436dp"
         android:background="@drawable/login_button"
         android:text="로그인"
         android:textColor="@color/black"

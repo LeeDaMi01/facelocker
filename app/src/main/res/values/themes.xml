@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Flocker" parent="Theme.AppCompat.Light">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#31218EBD</item> //앱 맨 위 배경 색, 버튼 색
+        <item name="colorPrimary">#FFFFFF</item> //앱 맨 위 배경 색, 버튼 색
         <item name="colorPrimaryVariant">@color/black</item> // 상단바 색
         <item name="colorOnPrimary">@color/black</item> // 버튼 글자색
         <!-- Secondary brand color. -->
@@ -16,5 +16,10 @@
     <style name="CustomToolBar" parent="@style/Widget.AppCompat.Toolbar">
         <item name="titleTextColor">@color/white</item>
 
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
     </style>
 </resources>

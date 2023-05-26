@@ -10,27 +10,27 @@
         android:id="@+id/locker"
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="292dp"
-        android:text="사물함 확인"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="296dp"
         android:background="@drawable/button"
+        android:text="사물함 확인"
         android:textColor="@color/black"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/log"
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="400dp"
-        android:text="개폐 로그 확인"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="388dp"
         android:background="@drawable/button"
+        android:text="개폐 로그 확인"
         android:textColor="@color/black"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/logout"
@@ -49,23 +49,12 @@
         android:id="@+id/cancel"
         android:layout_width="109dp"
         android:layout_height="52dp"
-        android:layout_marginStart="228dp"
+        android:layout_marginStart="232dp"
         android:layout_marginTop="536dp"
         android:background="@drawable/button"
         android:text="회원탈퇴"
         android:textColor="@color/black"
         android:textSize="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/main_logo"
-        android:layout_width="234dp"
-        android:layout_height="106dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/logo2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

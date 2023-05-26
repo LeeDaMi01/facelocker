@@ -20,13 +20,10 @@ public class main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //액션바 이름
-        getSupportActionBar().setTitle("facelocker");
-
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-
-        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+        //액션바
+        getSupportActionBar().setIcon(R.drawable.logo2);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         locker = findViewById(R.id.locker);
         log = findViewById(R.id.log);
@@ -57,7 +54,7 @@ public class main extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), first.class);
+                Intent intent = new Intent(getApplicationContext(), quit.class);
                 startActivityForResult(intent, 3);
             }
         });

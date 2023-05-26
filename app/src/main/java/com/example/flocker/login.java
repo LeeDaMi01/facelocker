@@ -62,6 +62,7 @@ public class login extends AppCompatActivity {
                 } else {
                     // DB에 있는 정보와 비교하여 로그인 처리
                     if (checkCredentials(id, pw)) {
+                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                         // main 액티비티로 이동
                         Intent intent = new Intent(getApplicationContext(), main.class);
                         intent.putExtra("id", id);
