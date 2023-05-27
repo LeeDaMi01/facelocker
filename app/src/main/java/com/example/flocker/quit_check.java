@@ -22,7 +22,7 @@ public class quit_check extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), first.class);
-                startActivityForResult(intent, 7);
+                startActivityForResult(intent, 6);
             }
         });
     }
