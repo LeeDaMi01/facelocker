@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 public class quit extends AppCompatActivity {
 
-    Button quit_button;
-    CheckBox quit_checkbox;
+    private Button quit_button;
+    private CheckBox quit_checkbox;
+
+    private Bluetooth bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ public class quit extends AppCompatActivity {
 
         quit_button = findViewById(R.id.quit_button);
         quit_checkbox = findViewById(R.id.quit_checkbox);
+
+        //블루투스 활성화
+        bluetooth = new Bluetooth(this);
 
 
         quit_button.setOnClickListener(new View.OnClickListener() {

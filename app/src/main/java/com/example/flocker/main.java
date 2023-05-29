@@ -14,11 +14,13 @@ import android.widget.Toast;
 
 public class main extends AppCompatActivity {
 
-    Button locker, log, logout, cancel;
+    private Button locker, log, logout, cancel;
 
-    SharedPreferences getsavedata;
-    SharedPreferences.Editor setsavedata;
+    private SharedPreferences getsavedata;
+    private SharedPreferences.Editor setsavedata;
 
+    //블루투스 설정
+    Bluetooth bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,10 @@ public class main extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        getsavedata = getSharedPreferences("idpw",MODE_PRIVATE);
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+
+        //블루투스 활성화
+        bluetooth = new Bluetooth(this);
 
 
         //intent 로 안받고 저장된 SharedPreferences로 값을 가져옴
@@ -120,6 +125,4 @@ public class main extends AppCompatActivity {
 
         }
     }
-
-
 }

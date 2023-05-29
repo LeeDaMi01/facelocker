@@ -24,19 +24,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class login extends AppCompatActivity {
-    EditText number, password;
-    Button login2;
+    private EditText number, password;
+    private Button login2;
 
-    String myJSON;
+    private String myJSON;
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "user_id";
     private static final String TAG_PASSWORD = "user_password";
-    JSONArray peoples = null;
-    ArrayList<HashMap<String, String>> personList;
+    private JSONArray peoples = null;
+    private ArrayList<HashMap<String, String>> personList;
 
-    SharedPreferences getsavedata;
-    SharedPreferences.Editor setsavedata;
+    private SharedPreferences getsavedata;
+    private SharedPreferences.Editor setsavedata;
 
+    private Bluetooth bluetooth;
 
 
     @Override
@@ -45,6 +46,8 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().setTitle("facelocker");
+
+
 
         //EditText와 Button을 초기화
         number = findViewById(R.id.number);
@@ -69,11 +72,6 @@ public class login extends AppCompatActivity {
     }
 
     private boolean checkCredentials(String id, String pw) {
-
-        getsavedata = getSharedPreferences("idpw",MODE_PRIVATE);
-        setsavedata = getsavedata.edit();
-
-        System.out.println(personList + ": 리스트");
         for (HashMap<String, String> person : personList) {
             String dbId = person.get(TAG_ID);
             String dbPw = person.get(TAG_PASSWORD);
@@ -159,7 +157,7 @@ public class login extends AppCompatActivity {
                     showList();
 
                     //자동로그인 구현
-                    getsavedata = getSharedPreferences("idpw",MODE_PRIVATE);
+                    getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
                     String saveid = getsavedata.getString("id","");
                     String savepw = getsavedata.getString("pw","");
                     if(saveid.length() != 0 || savepw.length() != 0){
@@ -174,7 +172,7 @@ public class login extends AppCompatActivity {
 
     public void LoginLogic(String id, String pw){
 
-        getsavedata = getSharedPreferences("idpw",MODE_PRIVATE);
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
         setsavedata = getsavedata.edit();
 
         if (id.isEmpty() || pw.isEmpty()) {

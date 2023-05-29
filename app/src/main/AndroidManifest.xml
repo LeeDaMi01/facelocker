@@ -9,6 +9,21 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- 블루투스 권한 얻어오기 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!-- android 9 이하 블루투스 권한 얻어오기 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- android 9 이후 블루투스 권한 얻어오기 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 블루투스 연결 권한 얻어오기 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- 위치데이터 권한 가져오기 BACKGROUND 에서도 작동될수있게 (앱이 꺼져있어도 작동할수 있게 얻어오는것 인데 일단 쓸지 안쓸지 모르니 주석처리 -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />  -->
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -39,6 +54,7 @@
             android:exported="true"
             android:parentActivityName=".main">
         </activity>
+        <!-- SettingActivity 빨간색떠있어도 무시 잘 작동함 -->
         <activity
             android:name=".SettingActivity"
             android:exported="true"
