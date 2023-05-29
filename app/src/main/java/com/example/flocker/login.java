@@ -3,6 +3,7 @@ package com.example.flocker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -23,15 +24,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class login extends AppCompatActivity {
-    EditText number, password;
-    Button login2;
+    private EditText number, password;
+    private Button login2;
 
-    String myJSON;
+    private String myJSON;
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "user_id";
     private static final String TAG_PASSWORD = "user_password";
-    JSONArray peoples = null;
-    ArrayList<HashMap<String, String>> personList;
+    private JSONArray peoples = null;
+    private ArrayList<HashMap<String, String>> personList;
+
+    private SharedPreferences getsavedata;
+    private SharedPreferences.Editor setsavedata;
+
+    private Bluetooth bluetooth;
 
 
     @Override
@@ -40,6 +46,8 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().setTitle("facelocker");
+
+
 
         //EditText와 Button을 초기화
         number = findViewById(R.id.number);
@@ -56,22 +64,9 @@ public class login extends AppCompatActivity {
                 String id = number.getText().toString().trim();
                 String pw = password.getText().toString().trim();
 
-                if (id.isEmpty() || pw.isEmpty()) {
-                    // 아이디와 비밀번호를 입력하지 않은 경우
-                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // DB에 있는 정보와 비교하여 로그인 처리
-                    if (checkCredentials(id, pw)) {
-                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
-                        // main 액티비티로 이동
-                        Intent intent = new Intent(getApplicationContext(), main.class);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
-                    } else {
-                        // 로그인 실패 시의 동작
-                        Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                //클릭 했을시 로그인 시도
+                LoginLogic(id,pw);
+
             }
         });
     }
@@ -82,7 +77,7 @@ public class login extends AppCompatActivity {
             String dbPw = person.get(TAG_PASSWORD);
 
             if (dbId.equals(id) && dbPw.equals(pw)) {
-                return true; // ID와 비밀번호가 일치하는 경우
+                return true; //id 비밀번호가 일치했을때
             }
         }
         return false; // ID와 비밀번호가 일치하지 않는 경우
@@ -160,11 +155,53 @@ public class login extends AppCompatActivity {
                 if (result != null) {
                     myJSON = result;
                     showList();
+
+                    //자동로그인 구현
+                    getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+                    String saveid = getsavedata.getString("id","");
+                    String savepw = getsavedata.getString("pw","");
+                    if(saveid.length() != 0 || savepw.length() != 0){
+                        LoginLogic(saveid,savepw);
+                    }
                 }
             }
         }
         GetDataJSON g = new GetDataJSON();
         g.execute(url);
+    }
+
+    public void LoginLogic(String id, String pw){
+
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        setsavedata = getsavedata.edit();
+
+        if (id.isEmpty() || pw.isEmpty()) {
+            // 아이디와 비밀번호를 입력하지 않은 경우
+            Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+        } else {
+            // DB에 있는 정보와 비교하여 로그인 처리
+            if (checkCredentials(id, pw)) {
+
+                //로그인 눌렀을시 저장되는 아이디 패스워드 데이터 (자동로그인)
+                setsavedata.putString("id",id);
+                setsavedata.putString("pw",pw);
+                setsavedata.commit();
+
+                // 로그인 성공하였음으로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
+                setResult(RESULT_OK);
+                Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                //로그인에 성공하였음으로 로그인 화면 종료
+                finish();
+            } else {
+                // 로그인 실패 시의 동작
+
+                //자동로그인 실패시 id 또는 pw 가 변경되었음 보통 주로 pw 만 변경함으로 id 만 제공함
+                number = findViewById(R.id.number);
+                number.setText(getsavedata.getString("id",""));
+
+                Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
 

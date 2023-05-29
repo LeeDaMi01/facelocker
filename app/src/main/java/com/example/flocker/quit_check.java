@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 
 public class quit_check extends AppCompatActivity {
 
-    Button quit_check_button;
+    private Button quit_check_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class quit_check extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), first.class);
-                startActivityForResult(intent, 7);
+                startActivityForResult(intent, 6);
             }
         });
     }

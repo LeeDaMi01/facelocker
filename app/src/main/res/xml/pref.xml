@@ -4,9 +4,10 @@
     <PreferenceCategory
         android:title="알림 설정">
         <SwitchPreference
-            android:id="@+id/autoSwitch"
             android:defaultValue="false"
-            android:key="autoSwitch"
+            android:key="AlarmSwitch"
+            android:summaryOff="팝업 알림을 받지 않습니다."
+            android:summaryOn="팝업 알림을 받습니다."
             android:switchTextOff="OFF"
             android:switchTextOn="ON"
             android:title="알림 허용" />
@@ -15,11 +16,12 @@
     <PreferenceCategory
         android:title="블루투스 설정">
         <SwitchPreference
-            android:id="@+id/autoSwitch1"
             android:defaultValue="false"
-            android:key="autoSwitch1"
+            android:key="BluetoothSwitch"
             android:switchTextOff="OFF"
             android:switchTextOn="ON"
+            android:summaryOn="앱을 종료하여도 블루투스는 켜져있습니다."
+            android:summaryOff="앱 종료시 블루투스가 꺼집니다."
             android:title="항상 켜기" />
     </PreferenceCategory>
 </PreferenceScreen>
