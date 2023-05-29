@@ -22,14 +22,12 @@ public class SettingActivity extends AppCompatActivity {
 
     public static class SettingFragmnet extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-        private SharedPreferences getsavedata,sharedPreferences;
-        private SharedPreferences.Editor setsavedata,sharedPrefsEditor;
+        private SharedPreferences getsavedata;
+        private SharedPreferences.Editor setsavedata;
 
         @Override
         public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
             setPreferencesFromResource(R.xml.pref,rootKey);
-            sharedPreferences = getPreferenceManager().getSharedPreferences();
-            sharedPrefsEditor = sharedPreferences.edit();
 
         }
 
@@ -45,12 +43,14 @@ public class SettingActivity extends AppCompatActivity {
                     //블루투스 설정이 앱 종료시에도 켜짐일때
                     getsavedata = getContext().getSharedPreferences("savedata",MODE_PRIVATE);
                     setsavedata = getsavedata.edit();
+                    //블루투스 상태 저장
                     setsavedata.putBoolean("bluetooth",bluetoothEnabled);
                     setsavedata.commit();
                 }else {
                     //블루투스 설정이 앱 종료시 꺼짐일때
                     getsavedata = getContext().getSharedPreferences("savedata",MODE_PRIVATE);
                     setsavedata = getsavedata.edit();
+                    //블루투스 상태 저장
                     setsavedata.putBoolean("bluetooth",bluetoothEnabled);
                     setsavedata.commit();
                 }

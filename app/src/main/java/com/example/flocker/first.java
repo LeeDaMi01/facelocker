@@ -99,7 +99,6 @@ public class first extends AppCompatActivity {
         if (bluetooth_set == false){
             bluetooth.disableBluetooth();
         }
-        Toast.makeText(this,"bluetooth_set state : " + bluetooth_set ,Toast.LENGTH_SHORT).show();
     }
 
     //위치권한이 부여되었다고 여기로 값이 돌아옴 context를 연결해서 넘겨줬기 떄문에
