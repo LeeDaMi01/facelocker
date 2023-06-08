@@ -3,31 +3,22 @@ package com.example.flocker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import android.Manifest;
 
 public class first extends AppCompatActivity {
     private Button login1;
 
-    //최대 요청횟수
-    private final int Num_of_Permission_requests = 2;
-
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
 
+    //각종 퍼미션 및 블루투스 기능
+    Appsetup appsetup;
 
-    //블루투스 활성화 비활성화 기능
-    private Bluetooth bluetooth;
 
     //위치데이터 사용 요청에 이용될것 정의, 0보다 커야하는 정수
     private static final int REQUEST_LOCATION_PERMISSION = 1;
@@ -40,11 +31,27 @@ public class first extends AppCompatActivity {
         //액션바 이름
         getSupportActionBar().setTitle("facelocker");
 
-        //블루투스 활성화 비활성화 기능
-        bluetooth = new Bluetooth(this);
-
         //로그인 버튼
         login1 = findViewById(R.id.login1);
+
+        //퍼미션 및 각종 기능 넣어둔곳
+        appsetup = new Appsetup(this,this);
+
+        //권한 체크(퍼미션 체크했을때)
+        if (!appsetup.PermissionCheck()){
+            //퍼미션 요청
+            appsetup.requestPermission();
+        }
+
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        setsavedata = getsavedata.edit();
+
+        String MAC = appsetup.MACAddress();
+        setsavedata.putString("MAC",MAC);
+
+        /*
+        MAC 를 여기서 전송....?
+         */
 
         //로그인 버튼 클릭시, 로그인 화면으로 이동
         login1.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +104,7 @@ public class first extends AppCompatActivity {
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
         boolean bluetooth_set = getsavedata.getBoolean("bluetooth",false);
         if (bluetooth_set == false){
-            bluetooth.disableBluetooth();
+            appsetup.BluetothDisable();
         }
     }
 
@@ -106,23 +113,18 @@ public class first extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 위치 권한이 부여된 경우
-                bluetooth = new Bluetooth(this);
-            } else {
-                // 위치 권한이 거부된 경우
-                getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
-                setsavedata = getsavedata.edit();
-                int Num_Request = getsavedata.getInt("Request_Num",0);
-                //횟수를 카운팅하여 다시 요청함, 요청횟수 초과시 다시는 요청 안함
-                if ( Num_Request > Num_of_Permission_requests){
-                    Num_Request++;
-                    setsavedata.putInt("Num_Request",Num_Request);
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-                }else {
-                    Toast.makeText(this, "앱을 이용하는데 제한이 있습니다.", Toast.LENGTH_SHORT).show();
-                }
+            //퍼미션 수행이 올바르게 되었는지 체크, 여기서 리턴값이 돌아온게 false 였다면 사용자가 거부한거임
+            if (!appsetup.permissionResult(requestCode, permissions, grantResults)) {
+                // 다시 permission 요청
+                appsetup.requestPermission();
             }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            //만일 이후에 여기에서 퍼미션 추가적으로 처리할것이 있거나
+            //퍼미션 이후 처리할게 있다면 여기서 처리
+
+            //퍼미션 관련 처리후 이쪽으로 오니까 블루투스 활성화 요청
+            //블루투스 권한을 못얻었다면 BluetoothOnable() 내부에서 활성화 안하게 되어있으니 그냥 요청
+            appsetup.BluetoothEnable();
         }
     }
 }

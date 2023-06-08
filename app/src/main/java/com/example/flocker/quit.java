@@ -16,7 +16,7 @@ public class quit extends AppCompatActivity {
     private Button quit_button;
     private CheckBox quit_checkbox;
 
-    private Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,8 @@ public class quit extends AppCompatActivity {
         quit_checkbox = findViewById(R.id.quit_checkbox);
 
         //블루투스 활성화
-        bluetooth = new Bluetooth(this);
-
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
 
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override

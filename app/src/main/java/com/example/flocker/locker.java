@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 public class locker extends AppCompatActivity {
 
-    private Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class locker extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //블루투스 활성화
-        bluetooth = new Bluetooth(this);
-
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
     }
 }

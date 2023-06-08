@@ -20,7 +20,7 @@ public class main extends AppCompatActivity {
     private SharedPreferences.Editor setsavedata;
 
     //블루투스 설정
-    Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,8 @@ public class main extends AppCompatActivity {
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
 
         //블루투스 활성화
-        bluetooth = new Bluetooth(this);
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
 
 
         //intent 로 안받고 저장된 SharedPreferences로 값을 가져옴

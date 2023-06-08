@@ -2,7 +2,6 @@ package com.example.flocker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,8 +35,6 @@ public class login extends AppCompatActivity {
 
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
-
-    private Bluetooth bluetooth;
 
 
     @Override
