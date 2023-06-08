@@ -45,6 +45,7 @@ public class SettingActivity extends AppCompatActivity {
             //스마트폰 MAC 확인하는 부분 띄우기
             Bluetooth_MAC = findPreference("Bluetooth_MAC");
             setting_MAC = findPreference("setting_MAC");
+
             BluetoothSwitch = findPreference("BluetoothSwitch");
 
             //초기 설정
@@ -94,7 +95,7 @@ public class SettingActivity extends AppCompatActivity {
             }
             else if (key.equals("setting_MAC")) {
                 //mac 설정할때
-                String MAC = setting_MAC.getText().toString();
+                String MAC = setting_MAC.getText().toString().trim();
                 setting_MAC.setSummary(MAC);
                 setsavedata.putString("MAC",MAC);
                 setsavedata.commit();
