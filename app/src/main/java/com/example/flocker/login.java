@@ -51,7 +51,6 @@ public class login extends AppCompatActivity {
         getSupportActionBar().setTitle("facelocker");
 
 
-
         //EditText와 Button을 초기화
         number = findViewById(R.id.number);
         password = findViewById(R.id.password);
@@ -107,6 +106,7 @@ public class login extends AppCompatActivity {
     }
 
 
+
     protected void showList() {
         if (myJSON != null) {
             try {
@@ -134,6 +134,8 @@ public class login extends AppCompatActivity {
         }
     }
 
+    //웹 서버에서 데이터를 가져오는 AsyncTask
+    //AsyncTask = 백그라운드 스레드에서 비동기 작업(네트워크 요청, 데이터베이스 엑세스, 파일 입출력) 수행
     public void getData(String url) {
         class GetDataJSON extends AsyncTask<String, Void, String> {
 

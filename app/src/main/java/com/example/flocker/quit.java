@@ -3,7 +3,9 @@ package com.example.flocker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,10 +13,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class quit extends AppCompatActivity {
 
     private Button quit_button;
     private CheckBox quit_checkbox;
+
+    private String loggedInId;
 
     private Bluetooth bluetooth;
 
@@ -23,30 +30,64 @@ public class quit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quit);
 
-        //액션바 이름
+        //사용자 로그인 id 받기
+        Intent intent = getIntent();
+        loggedInId = intent.getStringExtra("loggedInId");
+        if (loggedInId != null) {
+            Log.d("quit", "loggedInId: " + loggedInId);
+        } else {
+            Log.d("quit", "로그인 정보가 전달되지 않았습니다.");
+        }
+
+        // 액션바 이름
         getSupportActionBar().setTitle("회원 탈퇴");
-        //액션바에 뒤로가기 버튼
+        // 액션바에 뒤로가기 버튼
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         quit_button = findViewById(R.id.quit_button);
         quit_checkbox = findViewById(R.id.quit_checkbox);
 
-        //블루투스 활성화
-        bluetooth = new Bluetooth(this);
-
-
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //체크박스를 클릭한 경우, quit_check로 이동
+                // 체크박스를 클릭한 경우, quit_check로 이동
                 if (quit_checkbox.isChecked()) {
+                    sendDeleteRequest(loggedInId);
+
+                    // quit_check 액티비티로 이동
                     Intent intent = new Intent(getApplicationContext(), quit_check.class);
                     startActivityForResult(intent, 6);
-                    //체크박스를 클릭하지 않은 경우
+
+                    //체크박스를 클릭하지 않은 경우, 안내문(토스트)
                 } else {
                     Toast.makeText(getApplicationContext(), "동의를 체크하셔야 합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void sendDeleteRequest(final String loggedInId) {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                String deleteUrl = "http://facelocker.dothome.co.kr/delete.php";
+                try {
+                    String postData = "id=" +loggedInId; //사용자 로그인 (loggedInID)
+                    URL url = new URL(deleteUrl); // url 객체 생성
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection(); //url 사용해서 http 연결, HttpURLConeection 객체 생성
+                    con.setRequestMethod("POST"); //POST 방식
+                    con.setDoOutput(true); //출력 스트림 설정
+                    con.getOutputStream().write(postData.getBytes()); //출력 스트림 작성
+
+                    int responseCode = con.getResponseCode(); //서버로부터 받은 응답 코드 responseCode 변수에 저장
+                    con.disconnect(); //http 연결 종료
+
+                    return responseCode;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return -1;
+                }
+            }
+        }.execute();// AsyncTask 실행
     }
 }

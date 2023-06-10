@@ -16,6 +16,7 @@ public class main extends AppCompatActivity {
 
     private Button locker, log, logout, cancel;
 
+    private String loggedInId;
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
 
@@ -26,6 +27,10 @@ public class main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //사용자 로그인 id 받기
+        Intent intent = getIntent();
+        loggedInId = intent.getStringExtra("loggedInId");
 
         //액션바
         getSupportActionBar().setIcon(R.drawable.logo2);
@@ -76,8 +81,9 @@ public class main extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), quit.class);
-                startActivityForResult(intent, 5);
+                Intent intent = new Intent(main.this, quit.class);
+                intent.putExtra("loggedInId", loggedInId);
+                startActivity(intent);
             }
         });
     }
