@@ -28,9 +28,12 @@ public class login extends AppCompatActivity {
     private Button login2;
 
     private String myJSON;
+
+    private String loggedInId;
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "user_id";
     private static final String TAG_PASSWORD = "user_password";
+    private static final String TAG_NAME = "name";
     private JSONArray peoples = null;
     private ArrayList<HashMap<String, String>> personList;
 
@@ -64,19 +67,39 @@ public class login extends AppCompatActivity {
                 String id = number.getText().toString().trim();
                 String pw = password.getText().toString().trim();
 
-                //클릭 했을시 로그인 시도
                 LoginLogic(id,pw);
 
+                if (id.isEmpty() || pw.isEmpty()) {
+                    // 아이디와 비밀번호를 입력하지 않은 경우
+                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // DB에 있는 정보와 비교하여 로그인 처리
+                    if (checkCredentials(id, pw)) {
+
+                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                        // main 액티비티로 이동
+                        Intent intent = new Intent(login.this, main.class);
+                        //로그인 id 전달
+                        intent.putExtra("loggedInId", loggedInId);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+                        // 로그인 실패 시의 동작
+                        Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
-
+    //클릭 했을시 로그인 시도
     private boolean checkCredentials(String id, String pw) {
         for (HashMap<String, String> person : personList) {
             String dbId = person.get(TAG_ID);
             String dbPw = person.get(TAG_PASSWORD);
 
             if (dbId.equals(id) && dbPw.equals(pw)) {
+                loggedInId = id;
                 return true; //id 비밀번호가 일치했을때
             }
         }
@@ -88,27 +111,23 @@ public class login extends AppCompatActivity {
         if (myJSON != null) {
             try {
                 JSONObject jsonObj = new JSONObject(myJSON);
-                peoples = jsonObj.getJSONArray(TAG_RESULTS);
+                peoples = jsonObj.getJSONArray(TAG_RESULTS); //로그인 결과 가져오기 (result)
 
                 for (int i = 0; i < peoples.length(); i++) {
                     JSONObject c = peoples.getJSONObject(i);
-                    String id = c.getString(TAG_ID);
-                    String password = c.getString(TAG_PASSWORD);
+                    String id = c.getString(TAG_ID); // user_id 가져와서 id로 저장
+                    String password = c.getString(TAG_PASSWORD); //user_password 가져와서 password로 저장
+                    String name = c.getString(TAG_NAME); // name 가져와서 name으로 저장
 
+                    //해시맵 객체 생성
                     HashMap<String, String> persons = new HashMap<>();
                     persons.put(TAG_ID, id);
                     persons.put(TAG_PASSWORD, password);
+                    persons.put(TAG_NAME, name);
 
+                    //생성된 해시맵 객체를 personList에 추가
                     personList.add(persons);
                 }
-
-                SimpleAdapter adapter = new SimpleAdapter(
-                        login.this, personList, android.R.layout.simple_list_item_2,
-                        new String[]{TAG_ID, TAG_PASSWORD},
-                        new int[]{android.R.id.text1, android.R.id.text2}
-                );
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -123,19 +142,22 @@ public class login extends AppCompatActivity {
                 String uri = params[0];
                 BufferedReader bufferedReader = null;
                 try {
-                    URL url = new URL(uri);
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    StringBuilder sb = new StringBuilder();
+                    URL url = new URL(uri); // url 객체 생성
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection(); //url 사용해서 http 연결, HttpURLConeection 객체 생성
+                    StringBuilder sb = new StringBuilder(); //데이터 저장하기 위한 StringBuilder 생성
 
-                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream())); // 데이터 읽기 위해 BufferedReader 객체 생성
 
                     String json;
+                    //한 줄씩 데이터 읽어와서 StringBuilder 객체에 추가
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json).append("\n");
                     }
 
+                    //문자열 반환, 공백 문자 제거
                     return sb.toString().trim();
 
+                    //예외처리
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
