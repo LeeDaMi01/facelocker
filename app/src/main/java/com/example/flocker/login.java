@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,12 +34,14 @@ public class login extends AppCompatActivity {
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "user_id";
     private static final String TAG_PASSWORD = "user_password";
+    private static final String TAG_NAME = "name";
     private JSONArray peoples = null;
     private ArrayList<HashMap<String, String>> personList;
 
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
 
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,12 @@ public class login extends AppCompatActivity {
 
         getSupportActionBar().setTitle("facelocker");
 
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        setsavedata = getsavedata.edit();
+
+        appsetup = new Appsetup(this,this);
+
+        appsetup.BluetoothEnable();
 
 
         //EditText와 Button을 초기화
@@ -72,7 +84,10 @@ public class login extends AppCompatActivity {
         for (HashMap<String, String> person : personList) {
             String dbId = person.get(TAG_ID);
             String dbPw = person.get(TAG_PASSWORD);
-
+            //
+            String dbnm = person.get(TAG_NAME);
+            setsavedata.putString("name",dbnm);
+            setsavedata.commit();
             if (dbId.equals(id) && dbPw.equals(pw)) {
                 return true; //id 비밀번호가 일치했을때
             }
@@ -91,10 +106,12 @@ public class login extends AppCompatActivity {
                     JSONObject c = peoples.getJSONObject(i);
                     String id = c.getString(TAG_ID);
                     String password = c.getString(TAG_PASSWORD);
+                    String name = c.getString(TAG_NAME);
 
                     HashMap<String, String> persons = new HashMap<>();
                     persons.put(TAG_ID, id);
                     persons.put(TAG_PASSWORD, password);
+                    persons.put(TAG_NAME,name);
 
                     personList.add(persons);
                 }
@@ -104,7 +121,6 @@ public class login extends AppCompatActivity {
                         new String[]{TAG_ID, TAG_PASSWORD},
                         new int[]{android.R.id.text1, android.R.id.text2}
                 );
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -168,25 +184,48 @@ public class login extends AppCompatActivity {
     }
 
     public void LoginLogic(String id, String pw){
-
-        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
-        setsavedata = getsavedata.edit();
-
         if (id.isEmpty() || pw.isEmpty()) {
             // 아이디와 비밀번호를 입력하지 않은 경우
             Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
         } else {
             // DB에 있는 정보와 비교하여 로그인 처리
             if (checkCredentials(id, pw)) {
-
                 //로그인 눌렀을시 저장되는 아이디 패스워드 데이터 (자동로그인)
                 setsavedata.putString("id",id);
                 setsavedata.putString("pw",pw);
                 setsavedata.commit();
 
+                String MAC = getsavedata.getString("MAC","");
+
+                if (MAC.equals("")){
+                    MAC = appsetup.MACAddress();
+                    setsavedata.putString("MAC",MAC);
+                    setsavedata.commit();
+
+                    //mac 데이터가 있을때만 됨
+                    if (MAC != null) {
+                        //mac 데이터 db 에 전송
+                        Response.Listener<String> upListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                        Macup macup = new Macup(id, MAC, upListener);
+                        RequestQueue requestQueue = Volley.newRequestQueue(this);
+                        requestQueue.add(macup);
+                        //여기까지 데이터 전송
+                    }
+                }
+
                 // 로그인 성공하였음으로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
                 setResult(RESULT_OK);
-                Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                 //로그인에 성공하였음으로 로그인 화면 종료
                 finish();
             } else {

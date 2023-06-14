@@ -15,6 +15,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -100,9 +107,23 @@ public class SettingActivity extends AppCompatActivity {
                 setsavedata.putString("MAC",MAC);
                 setsavedata.commit();
 
-                /*
-                db에 넣는거 작성
-                 */
+                //mac 데이터 db 에 전송
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                String getid = getsavedata.getString("id","");
+                Macup macup = new Macup(getid, MAC, responseListener);
+                RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                requestQueue.add(macup);
+                //여기까지 데이터 전송
+
 
             }
         }

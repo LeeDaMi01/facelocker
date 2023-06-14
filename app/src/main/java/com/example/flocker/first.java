@@ -17,7 +17,7 @@ public class first extends AppCompatActivity {
     private SharedPreferences.Editor setsavedata;
 
     //각종 퍼미션 및 블루투스 기능
-    Appsetup appsetup;
+    private Appsetup appsetup;
 
 
     //위치데이터 사용 요청에 이용될것 정의, 0보다 커야하는 정수
@@ -46,12 +46,7 @@ public class first extends AppCompatActivity {
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
         setsavedata = getsavedata.edit();
 
-        String MAC = appsetup.MACAddress();
-        setsavedata.putString("MAC",MAC);
-
-        /*
-        MAC 를 여기서 전송....?
-         */
+        appsetup.BluetoothEnable();
 
         //로그인 버튼 클릭시, 로그인 화면으로 이동
         login1.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +56,8 @@ public class first extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+
     }
     @Override
     //requestCode:요청, resultCode:결과, data:데이터

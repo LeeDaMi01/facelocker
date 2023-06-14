@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -75,11 +76,6 @@ public class Appsetup {
     public Appsetup(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
-    }
-
-    public boolean PermissionCheck() {
-        int result;
-        permissionList = new ArrayList<>();
 
         //저전력 블루투스 는 확실하게 안드로이드 13 부터 지원하기에 12에는 지원하기도하고 아니기도함
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
@@ -88,6 +84,12 @@ public class Appsetup {
         } else {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
+    }
+
+    public boolean PermissionCheck() {
+        int result;
+        permissionList = new ArrayList<>();
+
         for (String PC : Public_Permissions) {
             //퍼미션 체크를 했을때 result의 값이 0이 아니라면( 권한이 없다면 )
             result = ContextCompat.checkSelfPermission(context, PC);
@@ -160,7 +162,7 @@ public class Appsetup {
         return true;
     }
 
-    /*
+/*
     //나중에 테스트 할때 다시 활성화 하도록 하고 일단 기능에선 필요없음으로 주석처리
     public void printPermissionList() {
         //체크를 다시 한번 시도해서 없는 권한들을 저장함
@@ -170,21 +172,22 @@ public class Appsetup {
         intent.putExtra("permissionList", new ArrayList<>(permissionList));
         context.startActivity(intent);
     }
-     */
+ */
 
     public void BluetoothEnable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
             //bluetoothadapter 가 null 이면 블루투스 기능이 지원하지않는거
             if (leBluetoothAdapter != null && !leBluetoothAdapter.isEnabled()) {
                 //퍼미션 체크했을때 권한이없다면 기능 활성화 못함
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 context.startActivity(enableBtIntent);
             }
         } else if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             bluetoothAdapter.enable();
@@ -198,13 +201,13 @@ public class Appsetup {
             //bluetoothadapter 가 null 이면 블루투스 기능이 지원하지않는거
             if (leBluetoothAdapter != null && leBluetoothAdapter.isEnabled()) {
                 //퍼미션 체크했을때 퍼미션권한이없다면 기능 비활성화 못함
-                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 leBluetoothAdapter.disable();
             }
         } else if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             bluetoothAdapter.disable();
@@ -213,16 +216,17 @@ public class Appsetup {
 
     public String MACAddress(){
         String Address = null;
+        String error = "02:00:00:00:00:00";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
             if (leBluetoothAdapter != null && leBluetoothAdapter.isEnabled()) {
-                Address = leBluetoothAdapter.getAddress();
+                Address = leBluetoothAdapter.getAddress().trim();
             }
         } else if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
-            Address = bluetoothAdapter.getAddress();
+            Address = bluetoothAdapter.getAddress().trim();
         }
 
-        if ( (Address != null) && ( Address.equals("02:00:00:00:00:00") ) ) {
+        if ( Address.equals(error) ) {
             //wifi 가 켜져있고 연결되어있을때 wifi mac 주소 들고옴
             //근데 다른값 가져올 수 도 있음, rnadom wifi mac 도 들고옴
             Address = getMACAddress("wlan0");
