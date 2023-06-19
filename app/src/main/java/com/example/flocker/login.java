@@ -211,10 +211,13 @@ public class login extends AppCompatActivity {
                 setsavedata.putString("pw",pw);
                 setsavedata.commit();
 
-                // 로그인 성공하였음으로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
+                //전역 프리퍼런스에 id추가
+                PreferenceManager.setInt(login.this, "UserID", Integer.parseInt(id));
+
+                // 로그인 성공하였으므로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
                 setResult(RESULT_OK);
                 Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
-                //로그인에 성공하였음으로 로그인 화면 종료
+                //로그인에 성공하였으므로 로그인 화면 종료
                 finish();
             } else {
                 // 로그인 실패 시의 동작
