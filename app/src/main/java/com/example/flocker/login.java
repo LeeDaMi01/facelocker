@@ -75,13 +75,32 @@ public class login extends AppCompatActivity {
                 String id = number.getText().toString().trim();
                 String pw = password.getText().toString().trim();
 
-                //클릭 했을시 로그인 시도
                 LoginLogic(id,pw);
 
+                if (id.isEmpty() || pw.isEmpty()) {
+                    // 아이디와 비밀번호를 입력하지 않은 경우
+                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // DB에 있는 정보와 비교하여 로그인 처리
+                    if (checkCredentials(id, pw)) {
+
+                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                        // main 액티비티로 이동
+                        Intent intent = new Intent(login.this, main.class);
+                        //로그인 id 전달
+                        intent.putExtra("loggedInId", loggedInId);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+                        // 로그인 실패 시의 동작
+                        Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
-
+    //클릭 했을시 로그인 시도
     private boolean checkCredentials(String id, String pw) {
         for (HashMap<String, String> person : personList) {
             String dbId = person.get(TAG_ID);
@@ -97,6 +116,7 @@ public class login extends AppCompatActivity {
         }
         return false; // ID와 비밀번호가 일치하지 않는 경우
     }
+
 
 
     protected void showList() {
@@ -211,36 +231,10 @@ public class login extends AppCompatActivity {
                 setsavedata.putString("pw",pw);
                 setsavedata.commit();
 
-                String MAC = getsavedata.getString("MAC","");
+                //전역 프리퍼런스에 id추가
+                PreferenceManager.setInt(login.this, "UserID", Integer.parseInt(id));
 
-                if (MAC.equals("")){
-                    MAC = appsetup.MACAddress();
-                    setsavedata.putString("MAC",MAC);
-                    setsavedata.commit();
-
-                    //mac 데이터가 있을때만 됨
-                    if (MAC != null) {
-                        //mac 데이터 db 에 전송
-                        Response.Listener<String> upListener = new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-
-                        Macup macup = new Macup(id, MAC, upListener);
-                        RequestQueue requestQueue = Volley.newRequestQueue(this);
-                        requestQueue.add(macup);
-                        //여기까지 데이터 전송
-                    }
-                }
-
-                // 로그인 성공하였음으로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
+                // 로그인 성공하였으므로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
                 setResult(RESULT_OK);
                 Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                 //로그인에 성공하였음으로 로그인 화면 종료
