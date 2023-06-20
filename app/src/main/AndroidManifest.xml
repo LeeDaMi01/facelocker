@@ -47,18 +47,19 @@
 
         <activity
             android:name=".log"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
         <activity
             android:name=".locker"
             android:exported="true"
-            android:parentActivityName=".main">
+            android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
         <!-- SettingActivity 빨간색떠있어도 무시 잘 작동함 -->
         <activity
             android:name=".SettingActivity"
             android:exported="true"
-            android:parentActivityName=".main">
+            android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
 
         <activity
@@ -68,17 +69,24 @@
         <activity
             android:name=".login"
             android:exported="true"
-            android:parentActivityName=".main">
+            android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
         <activity
             android:name=".quit"
             android:exported="true"
-            android:parentActivityName=".main">
+            android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
         <activity
             android:name="quit_check"
             android:exported="true">
         </activity>
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

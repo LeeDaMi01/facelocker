@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,7 +22,7 @@ public class quit extends AppCompatActivity {
     private Button quit_button;
     private CheckBox quit_checkbox;
 
-    private String loggedInId;
+    private String loginId;
 
     private Bluetooth bluetooth;
 
@@ -32,9 +33,9 @@ public class quit extends AppCompatActivity {
 
         //사용자 로그인 id 받기
         Intent intent = getIntent();
-        loggedInId = intent.getStringExtra("loggedInId");
-        if (loggedInId != null) {
-            Log.d("quit", "loggedInId: " + loggedInId);
+        loginId = intent.getStringExtra("loginId");
+        if (loginId != null) {
+            Log.d("quit", "loginId: " + loginId);
         } else {
             Log.d("quit", "로그인 정보가 전달되지 않았습니다.");
         }
@@ -52,7 +53,7 @@ public class quit extends AppCompatActivity {
             public void onClick(View v) {
                 // 체크박스를 클릭한 경우, quit_check로 이동
                 if (quit_checkbox.isChecked()) {
-                    sendDeleteRequest(loggedInId);
+                    sendDeleteRequest(loginId);
 
                     // quit_check 액티비티로 이동
                     Intent intent = new Intent(getApplicationContext(), quit_check.class);
@@ -66,13 +67,13 @@ public class quit extends AppCompatActivity {
         });
     }
 
-    private void sendDeleteRequest(final String loggedInId) {
+    private void sendDeleteRequest(final String loginId) {
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
                 String deleteUrl = "http://facelocker.dothome.co.kr/delete.php";
                 try {
-                    String postData = "id=" +loggedInId; //사용자 로그인 (loggedInID)
+                    String postData = "id=" +loginId; //사용자 로그인 (loginId)
                     URL url = new URL(deleteUrl); // url 객체 생성
                     HttpURLConnection con = (HttpURLConnection) url.openConnection(); //url 사용해서 http 연결, HttpURLConeection 객체 생성
                     con.setRequestMethod("POST"); //POST 방식
@@ -89,5 +90,15 @@ public class quit extends AppCompatActivity {
                 }
             }
         }.execute();// AsyncTask 실행
+    }
+    //액션바에 있는 뒤로가기 버튼을 눌러도 데이터(메인화면 사용자 이름) 그대로 유지
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // 액션바의 뒤로가기 버튼 클릭 시 이전 화면으로 돌아가도록 처리
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

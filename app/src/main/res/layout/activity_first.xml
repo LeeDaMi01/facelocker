@@ -24,7 +24,10 @@
         android:layout_marginTop="436dp"
         android:background="@drawable/login_button"
         android:text="로그인"
+        android:fontFamily="@font/cafe5"
         android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

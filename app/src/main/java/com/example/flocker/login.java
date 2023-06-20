@@ -27,9 +27,9 @@ public class login extends AppCompatActivity {
     private EditText number, password;
     private Button login2;
 
+    private String loginId;
     private String myJSON;
 
-    private String loggedInId;
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "user_id";
     private static final String TAG_PASSWORD = "user_password";
@@ -74,12 +74,23 @@ public class login extends AppCompatActivity {
                 } else {
                     // DB에 있는 정보와 비교하여 로그인 처리
                     if (checkCredentials(id, pw)) {
+                        String name = "";
+                        //personList에서 id와 일치하는 사용자를 찾아 이름 가져오기
+                        for (HashMap<String, String> person : personList) {
+                            String dbId = person.get(TAG_ID);
+                            if (dbId.equals(id)) {
+                                name = person.get(TAG_NAME);
+                                break;
+                            }
+                        }
+                        //로그인 성공시 사용자 이름으로 토스트 메시지
+                        Toast.makeText(getApplicationContext(), name + "님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                         // main 액티비티로 이동
                         Intent intent = new Intent(login.this, main.class);
                         //로그인 id 전달
-                        intent.putExtra("loggedInId", loggedInId);
+                        intent.putExtra("loginId", id);
+                        intent.putExtra("loginName", name);
                         startActivity(intent);
                         finish();
 
@@ -98,7 +109,7 @@ public class login extends AppCompatActivity {
             String dbPw = person.get(TAG_PASSWORD);
 
             if (dbId.equals(id) && dbPw.equals(pw)) {
-                loggedInId = id;
+                loginId = id;
                 return true; //id 비밀번호가 일치했을때
             }
         }
@@ -206,6 +217,25 @@ public class login extends AppCompatActivity {
             // DB에 있는 정보와 비교하여 로그인 처리
             if (checkCredentials(id, pw)) {
 
+                String name = "";
+                //personList에서 id와 일치하는 사용자를 찾아 이름 가져오기
+                for (HashMap<String, String> person : personList) {
+                    String dbId = person.get(TAG_ID);
+                    if (dbId.equals(id)) {
+                        name = person.get(TAG_NAME);
+                        break;
+                    }
+                }
+                //로그인 성공시 사용자 이름으로 토스트 메시지
+                Toast.makeText(getApplicationContext(), name + "님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                // main 액티비티로 이동
+                Intent intent = new Intent(login.this, main.class);
+                //로그인 id 전달
+                intent.putExtra("loginId", id);
+                intent.putExtra("loginName", name);
+                startActivity(intent);
+                finish();
+
                 //로그인 눌렀을시 저장되는 아이디 패스워드 데이터 (자동로그인)
                 setsavedata.putString("id",id);
                 setsavedata.putString("pw",pw);
@@ -213,7 +243,6 @@ public class login extends AppCompatActivity {
 
                 // 로그인 성공하였음으로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
                 setResult(RESULT_OK);
-                Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                 //로그인에 성공하였음으로 로그인 화면 종료
                 finish();
             } else {

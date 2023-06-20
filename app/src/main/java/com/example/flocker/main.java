@@ -1,22 +1,32 @@
 package com.example.flocker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
 
 public class main extends AppCompatActivity {
 
     private Button locker, log, logout, cancel;
-
-    private String loggedInId;
+    private TextView name;
+    private String loginId;
+    private String loginName;
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
 
@@ -30,7 +40,18 @@ public class main extends AppCompatActivity {
 
         //사용자 로그인 id 받기
         Intent intent = getIntent();
-        loggedInId = intent.getStringExtra("loggedInId");
+        loginId = intent.getStringExtra("loginId");
+        loginName = intent.getStringExtra("loginName");
+
+        //사용자 로그인 id 받았는지 확인
+        if (loginId != null) {
+            Log.d("main", "loginId: " + loginId);
+        } else {
+            Log.d("main",  "정보가 전달되지 않았습니다.");
+        }
+
+        name = findViewById(R.id.name);
+        name.setText(loginName + "님");
 
         //액션바
         getSupportActionBar().setIcon(R.drawable.logo2);
@@ -82,8 +103,21 @@ public class main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(main.this, quit.class);
-                intent.putExtra("loggedInId", loggedInId);
+                intent.putExtra("loginId", loginId);
                 startActivity(intent);
+            }
+        });
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("FCM_TEST", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                String token = task.getResult();
+
+                Log.d("FCM_TEST", "Your device registration token is " + token);
             }
         });
     }

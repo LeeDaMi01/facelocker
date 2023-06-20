@@ -2,6 +2,7 @@ package com.example.flocker;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,11 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settinglayout);
+
+        // 액션바 이름
+        getSupportActionBar().setTitle("환경설정");
+        // 액션바에 뒤로가기 버튼
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.Setting_Layout,new SettingFragmnet()).commit();
 
@@ -72,6 +78,16 @@ public class SettingActivity extends AppCompatActivity {
             super.onPause();
             getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
+    }
+    //액션바에 있는 뒤로가기 버튼을 눌러도 데이터(메인화면 사용자 이름) 그대로 유지
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // 액션바의 뒤로가기 버튼 클릭 시 이전 화면으로 돌아가도록 처리
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
