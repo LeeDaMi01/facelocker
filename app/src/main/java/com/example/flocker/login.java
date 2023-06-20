@@ -26,17 +26,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.jar.Attributes;
 
 public class login extends AppCompatActivity {
     private EditText number, password;
     private Button login2;
 
     private String loginId;
+    private String loginName;
     private String myJSON;
     private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "user_id";
-    private static final String TAG_PASSWORD = "user_password";
-    private static final String TAG_NAME = "name";
+    private static final String TAG_ID = "Id";
+    private static final String TAG_PASSWORD = "Pw";
+    private static final String TAG_NAME = "Name";
     private JSONArray peoples = null;
     private ArrayList<HashMap<String, String>> personList;
 
@@ -84,11 +86,12 @@ public class login extends AppCompatActivity {
                     // DB에 있는 정보와 비교하여 로그인 처리
                     if (checkCredentials(id, pw)) {
 
-                        Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                         // main 액티비티로 이동
                         Intent intent = new Intent(login.this, main.class);
                         //로그인 id 전달
-                        intent.putExtra("loggedInId", loggedInId);
+                        intent.putExtra("loginId", loginId);
+                        intent.putExtra("loginName", loginName);
                         startActivity(intent);
                         finish();
 
@@ -105,12 +108,12 @@ public class login extends AppCompatActivity {
         for (HashMap<String, String> person : personList) {
             String dbId = person.get(TAG_ID);
             String dbPw = person.get(TAG_PASSWORD);
-            //
             String dbnm = person.get(TAG_NAME);
             setsavedata.putString("name",dbnm);
             setsavedata.commit();
             if (dbId.equals(id) && dbPw.equals(pw)) {
                 loginId = id;
+                loginName = dbnm;
                 return true; //id 비밀번호가 일치했을때
             }
         }
@@ -236,7 +239,7 @@ public class login extends AppCompatActivity {
 
                 // 로그인 성공하였으므로 성공했다고 값 반환, 그리고 메인화면 띄워달라고 요청
                 setResult(RESULT_OK);
-                Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
                 //로그인에 성공하였음으로 로그인 화면 종료
                 finish();
             } else {

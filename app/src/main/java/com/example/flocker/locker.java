@@ -36,10 +36,10 @@ public class locker extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //블루투스 활성화
-        appsetup = new Appsetup(this,this);
+        appsetup = new Appsetup(this, this);
         appsetup.BluetoothEnable();
     }
-    //액션바에 있는 뒤로가기 버튼을 눌러도 데이터(메인화면 사용자 이름) 그대로 유지
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -48,13 +48,18 @@ public class locker extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         locker_1 = findViewById(R.id.locker1);
         locker_2 = findViewById(R.id.locker2);
 
         // 사물함 상태를 확인하기 위해 HTTP 요청을 보냅니다.
-        String url ="http://facelocker.dothome.co.kr/using_locker.php";
+        String url = "http://facelocker.dothome.co.kr/using_locker.php";
         new HttpGetRequest().execute(url);
-
     }
 
     private class HttpGetRequest extends AsyncTask<String, Void, String> {
@@ -80,7 +85,7 @@ public class locker extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(locker.this, "캐치", Toast.LENGTH_SHORT).show();
+                result = "";
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -116,6 +121,7 @@ public class locker extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(locker.this, "JSON 파싱 오류", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(locker.this, "네트워크에 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();

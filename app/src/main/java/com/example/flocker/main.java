@@ -42,13 +42,14 @@ public class main extends AppCompatActivity {
         Intent intent = getIntent();
         loginId = intent.getStringExtra("loginId");
         loginName = intent.getStringExtra("loginName");
-
+    /*
         //사용자 로그인 id 받았는지 확인
         if (loginId != null) {
             Log.d("main", "loginId: " + loginId);
         } else {
             Log.d("main",  "정보가 전달되지 않았습니다.");
         }
+
 
         name = findViewById(R.id.name);
         name.setText(loginName + "님");
@@ -57,17 +58,19 @@ public class main extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.logo2);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+    */
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+
+        name = findViewById(R.id.name);
+        name.setText(loginName + "님");
+        name.setText(getsavedata.getString("name","") + "님");
+
+
 
         //블루투스 활성화
         appsetup = new Appsetup(this,this);
         appsetup.BluetoothEnable();
 
-
-        //intent 로 안받고 저장된 SharedPreferences로 값을 가져옴
-        String name = getsavedata.getString("name","");
-        //Toast.makeText(getApplicationContext(),   ""+name+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
 
         locker = findViewById(R.id.locker);
         log = findViewById(R.id.log);

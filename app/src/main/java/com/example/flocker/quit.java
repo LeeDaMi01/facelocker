@@ -3,6 +3,7 @@ package com.example.flocker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ public class quit extends AppCompatActivity {
     private Button quit_button;
     private CheckBox quit_checkbox;
 
+    private SharedPreferences getsavedata;
+
     private String loginId;
     private Appsetup appsetup;
 
@@ -30,14 +33,20 @@ public class quit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quit);
 
+        /*
         //사용자 로그인 id 받기
         Intent intent = getIntent();
-        loginId = intent.getStringExtra("loginId");
+        //loginId = intent.getStringExtra("loginId");
+
         if (loginId != null) {
             Log.d("quit", "loginId: " + loginId);
         } else {
             Log.d("quit", "로그인 정보가 전달되지 않았습니다.");
         }
+
+         */
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        loginId = getsavedata.getString("id","");
 
         // 액션바 이름
         getSupportActionBar().setTitle("회원 탈퇴");
