@@ -9,19 +9,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:text="사물함 번호"
+            android:text="사물함"
+            android:textColor="@color/black"
             android:textSize="30dp"
             android:textAlignment="center"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="시간"
+            android:layout_weight="2"
+            android:text="개폐 시간"
+            android:textColor="@color/black"
             android:textSize="30dp"
             android:textAlignment="center"/>
     </LinearLayout>
