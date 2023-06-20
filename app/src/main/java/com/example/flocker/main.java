@@ -31,7 +31,7 @@ public class main extends AppCompatActivity {
     private SharedPreferences.Editor setsavedata;
 
     //블루투스 설정
-    Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +61,13 @@ public class main extends AppCompatActivity {
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
 
         //블루투스 활성화
-        bluetooth = new Bluetooth(this);
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
 
 
         //intent 로 안받고 저장된 SharedPreferences로 값을 가져옴
-        //String id = getsavedata.getString("id","");
-        //Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
+        String name = getsavedata.getString("name","");
+        //Toast.makeText(getApplicationContext(),   ""+name+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
 
         locker = findViewById(R.id.locker);
         log = findViewById(R.id.log);
@@ -144,9 +145,7 @@ public class main extends AppCompatActivity {
             case 3 :
                 //locker 확인 할때 값이 돌아옴
                 if (resultCode == RESULT_OK){
-
                 }
-
                 else if (resultCode == RESULT_CANCELED){
                 }
                 break;

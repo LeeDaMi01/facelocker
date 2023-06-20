@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 public class locker extends AppCompatActivity {
 
-    private Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +20,8 @@ public class locker extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //블루투스 활성화
-        bluetooth = new Bluetooth(this);
-
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
     }
     //액션바에 있는 뒤로가기 버튼을 눌러도 데이터(메인화면 사용자 이름) 그대로 유지
     @Override

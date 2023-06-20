@@ -23,5 +23,18 @@
             android:summaryOn="앱을 종료하여도 블루투스는 켜져있습니다."
             android:summaryOff="앱 종료시 블루투스가 꺼집니다."
             android:title="항상 켜기" />
+
+        <Preference
+            android:title="Bluetooth MAC 확인"
+            android:key="Bluetooth_MAC"
+            android:summary="설정창으로 MAC 주소를 확인하도록 합니다."/>
+
+
+        <EditTextPreference
+            android:title="Bluetooth MAC 설정"
+            android:key="setting_MAC"
+            android:summary="02:00:00:00:00:00" />
+
     </PreferenceCategory>
+
 </PreferenceScreen>

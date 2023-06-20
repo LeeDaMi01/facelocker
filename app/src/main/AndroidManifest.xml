@@ -4,24 +4,42 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 블루투스 통신 권한 설정 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 와이파이 관련 권한 요청 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 안드로이 버전 13 이후 -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"/>
+
+    <!-- 안드로이드 13 이전, 미디어 사용권한, 권한요청 필요 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="31" />
+    <!-- 안드로이드 13 이후, 미디어 사용권한, 권한 요청 필요 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+
+    <!-- 위치 관련 권한 사용권한 요청 필요-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- 블루투스 권한 얻어오기 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 네트워크 정보 및 휴대폰 상태 권한 요청 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 휴대폰 상태 권한 안드로이드 10 이전 권한요청 -->
+    <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE"
+        tools:ignore="ProtectedPermissions"
+        android:maxSdkVersion="28"/>
 
-    <!-- android 9 이하 블루투스 권한 얻어오기 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- android 9 이후 블루투스 권한 얻어오기 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 블루투스 연결 권한 얻어오기 -->
+    <!--안드로이드 12 이전 버전에만 영향 줄수있는 블루투스 권한 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30"/>
+    <!-- 안드로이드 12 이후 버전에서 영향 줄수 있는 블루투스 권한 -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-
-    <!-- 위치데이터 권한 가져오기 BACKGROUND 에서도 작동될수있게 (앱이 꺼져있어도 작동할수 있게 얻어오는것 인데 일단 쓸지 안쓸지 모르니 주석처리 -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />  -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
 
 
     <application
@@ -64,7 +82,8 @@
 
         <activity
             android:name=".main"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".main">
         </activity>
         <activity
             android:name=".login"

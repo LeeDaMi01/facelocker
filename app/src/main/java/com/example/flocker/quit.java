@@ -23,8 +23,7 @@ public class quit extends AppCompatActivity {
     private CheckBox quit_checkbox;
 
     private String loginId;
-
-    private Bluetooth bluetooth;
+    private Appsetup appsetup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,15 @@ public class quit extends AppCompatActivity {
 
         // 액션바 이름
         getSupportActionBar().setTitle("회원 탈퇴");
-        // 액션바에 뒤로가기 버튼
+        //액션바에 뒤로가기 버튼
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         quit_button = findViewById(R.id.quit_button);
         quit_checkbox = findViewById(R.id.quit_checkbox);
+
+        //블루투스 활성화
+        appsetup = new Appsetup(this,this);
+        appsetup.BluetoothEnable();
 
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override
