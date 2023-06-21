@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/nanum"/>
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/cafe1"/>
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/cafe2"/>
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/cafe3"/>
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/cafe4"/>
+
+    <font android:fontStyle="normal"
+    android:fontWeight="400"
+    android:font="@font/cafe5"/>
+
+
+</font-family>
