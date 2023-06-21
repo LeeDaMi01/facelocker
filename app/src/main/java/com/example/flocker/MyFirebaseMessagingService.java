@@ -9,12 +9,17 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+    }
 
     private static final String CHANNEL_ID = "channel_id";
 
