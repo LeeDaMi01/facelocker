@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,13 +14,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class main extends AppCompatActivity {
 
@@ -38,6 +52,7 @@ public class main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         // 액션바 이름
         getSupportActionBar().setTitle("FaceLocker");
 
@@ -45,14 +60,16 @@ public class main extends AppCompatActivity {
         Intent intent = getIntent();
         loginId = intent.getStringExtra("loginId");
         loginName = intent.getStringExtra("loginName");
-    /*
+/*
         //사용자 로그인 id 받았는지 확인
         if (loginId != null) {
             Log.d("main", "loginId: " + loginId);
         } else {
-            Log.d("main",  "정보가 전달되지 않았습니다.");
+            Log.d("main", "정보가 전달되지 않았습니다.");
         }
 
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        loginId = getsavedata.getString("id","");
 
         name = findViewById(R.id.name);
         name.setText(loginName + "님");
@@ -61,17 +78,16 @@ public class main extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.logo2);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-    */
-        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+*/
+        getsavedata = getSharedPreferences("savedata", MODE_PRIVATE);
 
         name = findViewById(R.id.name);
         name.setText(loginName + "님");
-        name.setText(getsavedata.getString("name","") + "님");
-
+        name.setText(getsavedata.getString("name", "") + "님");
 
 
         //블루투스 활성화
-        appsetup = new Appsetup(this,this);
+        appsetup = new Appsetup(this, this);
         appsetup.BluetoothEnable();
 
 
@@ -99,8 +115,8 @@ public class main extends AppCompatActivity {
             public void onClick(View v) {
                 setsavedata = getsavedata.edit();
                 //저장된 로그인값 초기화(자동로그인 해지)
-                setsavedata.putString("id","");
-                setsavedata.putString("pw","");
+                setsavedata.putString("id", "");
+                setsavedata.putString("pw", "");
                 setsavedata.commit();
                 setResult(RESULT_OK);
                 finish();
@@ -114,23 +130,63 @@ public class main extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //FCM 토큰 받아오기
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if (!task.isSuccessful()) {
-                    Log.w("FCM_TEST", "Fetching FCM registration token failed", task.getException());
+                    Log.w("FCM_TEST", "FCM 등록 토큰 가져오기 실패", task.getException());
                     return;
                 }
 
                 String token = task.getResult();
 
-                Log.d("FCM_TEST", "Your device registration token is " + token);
+                Log.d("FCM_TEST", "기기 등록 토큰: " + token);
+
+                // 토큰을 PHP 스크립트로 전송
+                sendTokenToServer(token);
             }
         });
+
+    }
+    //토큰 DB에 추가하기 위해 POST로 전송
+    private void sendTokenToServer(String token) {
+        String url = "http://facelocker.dothome.co.kr/token.php";
+
+        // POST 요청을 보내기 위한 새로운 StringRequest 생성
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // 필요한 경우 서버로부터의 응답 처리
+                        Log.d("FCM_TEST", "토큰 업데이트 응답: " + response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // 에러 처리
+                        Log.e("FCM_TEST", "토큰 업데이트 오류: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // 서버로 전송할 매개변수를 담을 HashMap 생성
+                Map<String, String> params = new HashMap<>();
+                params.put("id", loginId); // 여기에 사용자의 loginId를 전달하세요
+                params.put("token", token); // 여기에 FCM 토큰을 전달하세요
+
+                return params;
+            }
+        };
+
+        // 요청을 RequestQueue에 추가
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);//파라미터로 받은 메뉴에다가 붙여달라.
+        getMenuInflater().inflate(R.menu.main_menu, menu);//파라미터로 받은 메뉴에다가 붙여달라.
         return true;
     }
 
@@ -144,30 +200,29 @@ public class main extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
-    protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 3 :
+        switch (requestCode) {
+            case 3:
                 //locker 확인 할때 값이 돌아옴
-                if (resultCode == RESULT_OK){
-                }
-                else if (resultCode == RESULT_CANCELED){
+                if (resultCode == RESULT_OK) {
+                } else if (resultCode == RESULT_CANCELED) {
                 }
                 break;
             case 4:
-                if (resultCode == RESULT_OK){
-                }
-                else if (resultCode == RESULT_CANCELED) {
+                if (resultCode == RESULT_OK) {
+                } else if (resultCode == RESULT_CANCELED) {
                 }
                 break;
             case 5:
-                if (resultCode == RESULT_OK){
-                }
-                else if (resultCode == RESULT_CANCELED) {
+                if (resultCode == RESULT_OK) {
+                } else if (resultCode == RESULT_CANCELED) {
                 }
                 break;
 
         }
     }
+
 }

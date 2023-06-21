@@ -12,10 +12,6 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +22,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.jar.Attributes;
 
 public class login extends AppCompatActivity {
     private EditText number, password;
@@ -111,7 +106,7 @@ public class login extends AppCompatActivity {
             String dbnm = person.get(TAG_NAME);
             setsavedata.putString("name",dbnm);
             setsavedata.commit();
-            Toast.makeText(login.this, "ID : " + dbId + ", PW : " + dbPw, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(login.this, "ID : " + dbId + ", PW : " + dbPw, Toast.LENGTH_SHORT).show();
             if (dbId.equals(id) && dbPw.equals(pw)) {
                 loginId = id;
                 loginName = dbnm;
@@ -229,6 +224,13 @@ public class login extends AppCompatActivity {
         } else {
             // DB에 있는 정보와 비교하여 로그인 처리
             if (checkCredentials(id, pw)) {
+
+                Intent intent = new Intent(login.this, main.class);
+                //로그인 id 전달
+                intent.putExtra("loginId", loginId);
+                intent.putExtra("loginName", loginName);
+                startActivity(intent);
+                finish();
 
                 //로그인 눌렀을시 저장되는 아이디 패스워드 데이터 (자동로그인)
                 setsavedata.putString("id",id);
