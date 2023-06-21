@@ -47,8 +47,9 @@ public class log extends AppCompatActivity {
         appsetup.BluetoothEnable();
 
         int UserID = PreferenceManager.getInt(this, "UserID"); // ID받아오기
-        //String url = "http://facelocker.dothome.co.kr/log.php?userID=" + UserID;
-        String url = "http://facelocker.dothome.co.kr/logex.php";
+
+        String url = "http://facelocker.dothome.co.kr/log.php?userID=" + UserID;
+        //String url = "http://facelocker.dothome.co.kr/logex.php";
 
         // 리사이클러뷰 시작
         recyclerView = findViewById(R.id.logRecyclerView);
@@ -105,34 +106,42 @@ public class log extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                if (result != null) {
-                    try {
-                        JSONObject jsonObj = new JSONObject(result);
+
+                try {
+                    JSONObject jsonObj = new JSONObject(result);
+
+                    if (jsonObj.has("result")) {
                         logs = jsonObj.getJSONArray("result");
 
-                        for (int i = 0; i < logs.length(); i++) {
-                            JSONObject L = logs.getJSONObject(i);
-                            int lockerNum = L.getInt("Locker_num");
-                            String openTimeStr = L.getString("Opentime");
+                        if (logs.length() > 0) {
+                            for (int i = 0; i < logs.length(); i++) {
+                                JSONObject L = logs.getJSONObject(i);
+                                int lockerNum = L.getInt("Locker_num");
+                                String openTimeStr = L.getString("Opentime");
 
-                            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date parsedDate = inputFormat.parse(openTimeStr);
-                            Timestamp openTime = new Timestamp(parsedDate.getTime());
+                                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date parsedDate = inputFormat.parse(openTimeStr);
+                                Timestamp openTime = new Timestamp(parsedDate.getTime());
 
-                            logItem logItem = new logItem(lockerNum, openTime);
-                            dataList.add(logItem);
+                                logItem logItem = new logItem(lockerNum, openTime);
+                                dataList.add(logItem);
+                            }
+                            adapter.notifyDataSetChanged(); // 어댑터 아이템 변경을 알림
                         }
-                        adapter.notifyDataSetChanged(); // 어댑터 아이템 변경을 알림
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(log.this, "온포스트엑스큐트에서 익셉션 발생", Toast.LENGTH_SHORT).show();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        Toast.makeText(log.this, "날짜 형식 변환 중 에러 발생", Toast.LENGTH_SHORT).show();
+                        else{
+                            Toast.makeText(log.this, "개폐 로그가 없습니다", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(log.this, "opPostExecute Exception 발생", Toast.LENGTH_SHORT).show();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Toast.makeText(log.this, "날짜 형식 변환 중 에러 발생", Toast.LENGTH_SHORT).show();
                 }
             }
+
         }
 
         GetDataJSON g = new GetDataJSON();

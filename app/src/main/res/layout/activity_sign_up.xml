@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
-
+    tools:context=".SignUp">
     <EditText
-        android:id="@+id/number"
+        android:id="@+id/SignUpNum"
         android:layout_width="253dp"
         android:layout_height="42dp"
         android:layout_marginStart="88dp"
-        android:layout_marginTop="316dp"
+        android:layout_marginTop="204dp"
         android:background="@drawable/id_pw_button"
         android:ems="10"
         android:hint="  아이디(학번)"
@@ -22,11 +21,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/SignUpPw"
         android:layout_width="253dp"
         android:layout_height="42dp"
         android:layout_marginStart="88dp"
-        android:layout_marginTop="392dp"
+        android:layout_marginTop="280dp"
         android:background="@drawable/id_pw_button"
         android:ems="10"
         android:hint="  비밀번호"
@@ -37,15 +36,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <EditText
+        android:id="@+id/SignUpName"
+        android:layout_width="253dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="356dp"
+        android:background="@drawable/id_pw_button"
+        android:ems="10"
+        android:hint=" 이름"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/SingUpPhone"
+        android:layout_width="253dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="432dp"
+        android:background="@drawable/id_pw_button"
+        android:ems="10"
+        android:hint=" 휴대전화"
+        android:inputType="textPassword"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <Button
-        android:id="@+id/login2"
+        android:id="@+id/SignUpBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="132dp"
-        android:layout_marginTop="404dp"
+        android:layout_marginTop="484dp"
         android:background="@drawable/login_button"
-        android:text="로그인"
-        android:fontFamily="@font/cafe5"
+        android:text="회원가입"
         android:textSize="15dp"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -57,10 +88,9 @@
         android:layout_width="201dp"
         android:layout_height="177dp"
         android:layout_marginStart="104dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/logo1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

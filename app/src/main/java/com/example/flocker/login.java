@@ -111,6 +111,7 @@ public class login extends AppCompatActivity {
             String dbnm = person.get(TAG_NAME);
             setsavedata.putString("name",dbnm);
             setsavedata.commit();
+            Toast.makeText(login.this, "ID : " + dbId + ", PW : " + dbPw, Toast.LENGTH_SHORT).show();
             if (dbId.equals(id) && dbPw.equals(pw)) {
                 loginId = id;
                 loginName = dbnm;

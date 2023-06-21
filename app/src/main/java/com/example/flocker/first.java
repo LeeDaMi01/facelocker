@@ -12,7 +12,7 @@ import android.widget.Button;
 
 public class first extends AppCompatActivity {
     private Button login1;
-
+    private Button signup;
     private SharedPreferences getsavedata;
     private SharedPreferences.Editor setsavedata;
 
@@ -33,7 +33,7 @@ public class first extends AppCompatActivity {
 
         //로그인 버튼
         login1 = findViewById(R.id.login1);
-
+        signup = findViewById(R.id.signup);
         //퍼미션 및 각종 기능 넣어둔곳
         appsetup = new Appsetup(this,this);
 
@@ -56,7 +56,13 @@ public class first extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
-
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SignUp.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
     }
     @Override

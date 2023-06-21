@@ -2,46 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- 와이파이 관련 권한 요청 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 와이파이 관련 권한 요청 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- 안드로이 버전 13 이후 -->
-    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"/>
-
-    <!-- 안드로이드 13 이전, 미디어 사용권한, 권한요청 필요 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="31" />
-    <!-- 안드로이드 13 이후, 미디어 사용권한, 권한 요청 필요 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 안드로이 버전 13 이후 -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" /> <!-- 안드로이드 13 이전, 미디어 사용권한, 권한요청 필요 -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="31" /> <!-- 안드로이드 13 이후, 미디어 사용권한, 권한 요청 필요 -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-
-    <!-- 위치 관련 권한 사용권한 요청 필요-->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" /> <!-- 위치 관련 권한 사용권한 요청 필요 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- 네트워크 정보 및 휴대폰 상태 권한 요청 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!-- 휴대폰 상태 권한 안드로이드 10 이전 권한요청 -->
-    <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE"
-        tools:ignore="ProtectedPermissions"
-        android:maxSdkVersion="28"/>
-
-    <!--안드로이드 12 이전 버전에만 영향 줄수있는 블루투스 권한 -->
-    <uses-permission android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30"/>
-    <!-- 안드로이드 12 이후 버전에서 영향 줄수 있는 블루투스 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 네트워크 정보 및 휴대폰 상태 권한 요청 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 휴대폰 상태 권한 안드로이드 10 이전 권한요청 -->
+    <uses-permission
+        android:name="android.permission.READ_PRECISE_PHONE_STATE"
+        android:maxSdkVersion="28"
+        tools:ignore="ProtectedPermissions" /> <!-- 안드로이드 12 이전 버전에만 영향 줄수있는 블루투스 권한 -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" /> <!-- 안드로이드 12 이후 버전에서 영향 줄수 있는 블루투스 권한 -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
-
-    <!-- 인터넷 권한 추가하기 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" /> <!-- 인터넷 권한 추가하기 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -53,8 +41,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Flocker"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".SignUp"
+            android:exported="false" />
         <activity
             android:name=".first"
             android:exported="true">
@@ -74,18 +65,16 @@
             android:name=".locker"
             android:exported="true"
             android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
-        </activity>
-        <!-- SettingActivity 빨간색떠있어도 무시 잘 작동함 -->
+        </activity> <!-- SettingActivity 빨간색떠있어도 무시 잘 작동함 -->
         <activity
             android:name=".SettingActivity"
             android:exported="true"
             android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
-
         <activity
             android:name=".main"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:parentActivityName=".main"></activity>
         <activity
             android:name=".login"
             android:exported="true"
@@ -97,9 +86,9 @@
             android:parentActivityName=".main"> <!-- 뒤로가기 버튼 클릭시 메인화면으로 이동 -->
         </activity>
         <activity
-            android:name="quit_check"
-            android:exported="true">
-        </activity>
+            android:name=".quit_check"
+            android:exported="true"></activity>
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
