@@ -38,7 +38,7 @@ public class log extends AppCompatActivity {
         setContentView(R.layout.activity_log);
 
         //액션바 이름
-        getSupportActionBar().setTitle("개페 로그 확인");
+        getSupportActionBar().setTitle("개폐 로그 확인");
         //액션바에 뒤로가기 버튼
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
