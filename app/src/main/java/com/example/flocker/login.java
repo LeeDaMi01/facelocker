@@ -52,7 +52,7 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().setTitle("facelocker");
+        getSupportActionBar().setTitle("FaceLocker");
 
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
         setsavedata = getsavedata.edit();

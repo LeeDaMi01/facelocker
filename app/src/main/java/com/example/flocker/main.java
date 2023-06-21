@@ -38,6 +38,9 @@ public class main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 액션바 이름
+        getSupportActionBar().setTitle("FaceLocker");
+
         //사용자 로그인 id 받기
         Intent intent = getIntent();
         loginId = intent.getStringExtra("loginId");

@@ -29,7 +29,7 @@ public class first extends AppCompatActivity {
         setContentView(R.layout.activity_first);
 
         //액션바 이름
-        getSupportActionBar().setTitle("facelocker");
+        getSupportActionBar().setTitle("FaceLocker");
 
         //로그인 버튼
         login1 = findViewById(R.id.login1);
