@@ -64,9 +64,10 @@ public class main extends AppCompatActivity {
         name = findViewById(R.id.name);
         name.setText(loginName + "님");
 
-        loginId = getsavedata.getString("name", "");
-        name.setText(loginId + "님");
+        loginName = getsavedata.getString("name", "");
+        name.setText(loginName + "님");
 
+        loginId = getsavedata.getString("id","");
 
         //블루투스 활성화
         appsetup = new Appsetup(this, this);
