@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,28 +77,6 @@ public class login extends AppCompatActivity {
                 String pw = password.getText().toString().trim();
 
                 LoginLogic(id,pw);
-
-                if (id.isEmpty() || pw.isEmpty()) {
-                    // 아이디와 비밀번호를 입력하지 않은 경우
-                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // DB에 있는 정보와 비교하여 로그인 처리
-                    if (checkCredentials(id, pw)) {
-
-                        //Toast.makeText(getApplicationContext(),   ""+id+"님이 로그인 하셨습니다", Toast.LENGTH_SHORT).show();
-                        // main 액티비티로 이동
-                        Intent intent = new Intent(login.this, main.class);
-                        //로그인 id 전달
-                        intent.putExtra("loginId", loginId);
-                        intent.putExtra("loginName", loginName);
-                        startActivity(intent);
-                        finish();
-
-                    } else {
-                        // 로그인 실패 시의 동작
-                        Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
     }
@@ -225,17 +207,38 @@ public class login extends AppCompatActivity {
             // DB에 있는 정보와 비교하여 로그인 처리
             if (checkCredentials(id, pw)) {
 
-                Intent intent = new Intent(login.this, main.class);
-                //로그인 id 전달
-                intent.putExtra("loginId", loginId);
-                intent.putExtra("loginName", loginName);
-                startActivity(intent);
-                finish();
-
                 //로그인 눌렀을시 저장되는 아이디 패스워드 데이터 (자동로그인)
                 setsavedata.putString("id",id);
                 setsavedata.putString("pw",pw);
                 setsavedata.commit();
+
+                String MAC = getsavedata.getString("MAC","");
+                String check = "";
+                //블루투스가 지원하는지 체크
+                if (appsetup.getDeviceblueState()){
+                    //맥데이터가 있는지 체크
+                    if (MAC.equals(check)){
+                        MAC = appsetup.MACAddress();
+                        setsavedata.putString("MAC", MAC);
+                        setsavedata.commit();
+                        if (!MAC.equals(check)){
+                            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+                            String getid = getsavedata.getString("id","");
+                            Macup postdata = new Macup(getid, MAC, responseListener);
+                            RequestQueue requestQueue = Volley.newRequestQueue(this);
+                            requestQueue.add(postdata);
+                        }
+                    }
+                }
 
                 //전역 프리퍼런스에 id추가
                 PreferenceManager.setInt(login.this, "UserID", Integer.parseInt(id));
@@ -250,7 +253,11 @@ public class login extends AppCompatActivity {
 
                 //자동로그인 실패시 id 또는 pw 가 변경되었음 보통 주로 pw 만 변경함으로 id 만 제공함
                 number = findViewById(R.id.number);
-                number.setText(getsavedata.getString("id",""));
+                String getid = getsavedata.getString("id","");
+                String NulL = "";
+                if (!getid.equals(NulL)) {
+                    number.setText(getid);
+                }
 
                 Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호가 잘못 입력되었습니다.", Toast.LENGTH_SHORT).show();
             }

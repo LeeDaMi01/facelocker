@@ -23,6 +23,7 @@ public class quit_check extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), first.class);
                 startActivityForResult(intent, 6);
+                finish();
             }
         });
     }

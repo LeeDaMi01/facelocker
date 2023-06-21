@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class first extends AppCompatActivity {
     private Button login1;
@@ -76,7 +77,7 @@ public class first extends AppCompatActivity {
                 if (resultCode == RESULT_OK){
                     Intent intent = new Intent(getApplicationContext(), main.class);
                     startActivityForResult(intent,2);
-
+                    finish();
                 }
                 //로그인화면에서 뒤로가기 버튼눌렀을때 혹은 RESULT_CANCELED값을 반환받았을때
                 else if (resultCode == RESULT_CANCELED){
@@ -86,6 +87,7 @@ public class first extends AppCompatActivity {
             case 2:
                 //메인화면에서 돌아오는 요청
                 if (resultCode == RESULT_OK){
+
                     //혹시 모르니 비워둠
                     //Intent intent = new Intent(getApplicationContext(), main.class);
                 }

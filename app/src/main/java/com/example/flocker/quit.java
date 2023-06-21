@@ -24,6 +24,7 @@ public class quit extends AppCompatActivity {
     private CheckBox quit_checkbox;
 
     private SharedPreferences getsavedata;
+    private SharedPreferences.Editor setsavedata;
 
     private String loginId;
     private Appsetup appsetup;
@@ -46,6 +47,8 @@ public class quit extends AppCompatActivity {
 
          */
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        setsavedata = getsavedata.edit();
+
         loginId = getsavedata.getString("id","");
 
         // 액션바 이름
@@ -70,6 +73,16 @@ public class quit extends AppCompatActivity {
                     // quit_check 액티비티로 이동
                     Intent intent = new Intent(getApplicationContext(), quit_check.class);
                     startActivityForResult(intent, 6);
+
+                    //프리퍼런스 초기화
+                    setsavedata.putString("id", "");
+                    setsavedata.putString("pw", "");
+                    setsavedata.putString("MAC","");
+                    setsavedata.commit();
+                    setResult(RESULT_OK);
+                    finish();
+
+
 
                     //체크박스를 클릭하지 않은 경우, 안내문(토스트)
                 } else {

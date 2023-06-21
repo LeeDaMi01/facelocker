@@ -18,7 +18,7 @@ public class Macup extends StringRequest {
         super(Method.POST, URL, listener, null);
         Params = new HashMap<>();
         Params.put("user_id", id);
-        Params.put("MACAddress", mac);
+        Params.put("data", mac);
     }
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {

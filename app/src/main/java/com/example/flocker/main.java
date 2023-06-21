@@ -52,38 +52,20 @@ public class main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // 액션바 이름
         getSupportActionBar().setTitle("FaceLocker");
-
-        //사용자 로그인 id 받기
-        Intent intent = getIntent();
-        loginId = intent.getStringExtra("loginId");
-        loginName = intent.getStringExtra("loginName");
-/*
-        //사용자 로그인 id 받았는지 확인
-        if (loginId != null) {
-            Log.d("main", "loginId: " + loginId);
-        } else {
-            Log.d("main", "정보가 전달되지 않았습니다.");
-        }
-
-        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
-        loginId = getsavedata.getString("id","");
-
-        name = findViewById(R.id.name);
-        name.setText(loginName + "님");
 
         //액션바
         getSupportActionBar().setIcon(R.drawable.logo2);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-*/
         getsavedata = getSharedPreferences("savedata", MODE_PRIVATE);
 
         name = findViewById(R.id.name);
         name.setText(loginName + "님");
-        name.setText(getsavedata.getString("name", "") + "님");
+
+        loginId = getsavedata.getString("name", "");
+        name.setText(loginId + "님");
 
 
         //블루투스 활성화
@@ -118,7 +100,8 @@ public class main extends AppCompatActivity {
                 setsavedata.putString("id", "");
                 setsavedata.putString("pw", "");
                 setsavedata.commit();
-                setResult(RESULT_OK);
+                Intent first = new Intent(getApplicationContext(), com.example.flocker.first.class);
+                startActivity(first);
                 finish();
             }
         });
@@ -126,8 +109,7 @@ public class main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(main.this, quit.class);
-                intent.putExtra("loginId", loginId);
-                startActivity(intent);
+                startActivityForResult(intent,5);
             }
         });
         //FCM 토큰 받아오기
@@ -218,6 +200,7 @@ public class main extends AppCompatActivity {
                 break;
             case 5:
                 if (resultCode == RESULT_OK) {
+                    finish();
                 } else if (resultCode == RESULT_CANCELED) {
                 }
                 break;

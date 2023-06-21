@@ -229,16 +229,22 @@ public class Appsetup {
         if ( Address.equals(error) ) {
             //wifi 가 켜져있고 연결되어있을때 wifi mac 주소 들고옴
             //근데 다른값 가져올 수 도 있음, rnadom wifi mac 도 들고옴
-            Address = getMACAddress("wlan0");
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S_V2){
+                Address = getMACAddress("wlan0");
 
-            //끝자리를 -1 로 변환하는 과정임
-            char[] re = Address.substring(Address.length()-2).toCharArray();
-            re[re.length-1] = (char) (re[re.length-1]-1);
-            if ( re[re.length-1] == 'A'-1){
-                re[re.length-2] = (char) (re[re.length-2]-1);
-                re[re.length-2] = 'F';
+                //끝자리를 -1 로 변환하는 과정임
+                char[] re = Address.substring(Address.length() - 2).toCharArray();
+                re[re.length - 1] = (char) (re[re.length - 1] - 1);
+                if (re[re.length - 1] == 'A' - 1) {
+                    re[re.length - 2] = (char) (re[re.length - 2] - 1);
+                    re[re.length - 2] = 'F';
+                }
+                Address.replace(Address.substring(Address.length() - 2), String.valueOf(re));
+                Toast.makeText(context,"설정에 가셔서 블루투스 주소가 맞는지 확인해 주세요.",Toast.LENGTH_SHORT).show();
             }
-            Address.replace(Address.substring(Address.length()-2), String.valueOf(re));
+            else {
+                Toast.makeText(context,"설정에 가셔서 블루투스 주소가 맞는지 확인해 주세요.",Toast.LENGTH_SHORT).show();
+            }
         }
         return Address;
     }
@@ -261,6 +267,22 @@ public class Appsetup {
             }
         } catch (Exception ex) { } // for now eat exceptions
         return "";
+    }
+
+    public boolean getDeviceblueState(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2){
+            if (leBluetoothAdapter == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }else {
+            if (bluetoothAdapter == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
 

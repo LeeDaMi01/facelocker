@@ -2,6 +2,7 @@ package com.example.flocker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,9 @@ public class SignUp extends AppCompatActivity {
     private EditText editTextName;
     private Button buttonSignUp;
 
+    private SharedPreferences getsavedata;
+    private SharedPreferences.Editor setsavedata;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +33,9 @@ public class SignUp extends AppCompatActivity {
         getSupportActionBar().setTitle("회원가입");
         //액션바에 뒤로가기 버튼
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        setsavedata = getsavedata.edit();
 
         editTextId = findViewById(R.id.SignUpNum);
         editTextPw = findViewById(R.id.SignUpPw);
@@ -103,6 +110,11 @@ public class SignUp extends AppCompatActivity {
             if (result != null) {
                 if (result.equals("회원가입이 완료되었습니다.")) {
                     Toast.makeText(SignUp.this, result, Toast.LENGTH_SHORT).show();
+
+                    setsavedata.putString("id", "");
+                    setsavedata.putString("pw", "");
+                    setsavedata.putString("MAC", "");
+                    setsavedata.commit();
                     finish(); // 액티비티 종료
                 } else {
                     Toast.makeText(SignUp.this, result, Toast.LENGTH_SHORT).show();

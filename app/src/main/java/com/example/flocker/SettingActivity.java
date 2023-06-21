@@ -60,7 +60,9 @@ public class SettingActivity extends AppCompatActivity {
             setting_MAC = findPreference("setting_MAC");
 
             BluetoothSwitch = findPreference("BluetoothSwitch");
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                BluetoothSwitch.setChecked(true);
+            }
             //초기 설정
             String MAC = getsavedata.getString("MAC","");
             setting_MAC.setSummary(MAC);
@@ -99,8 +101,8 @@ public class SettingActivity extends AppCompatActivity {
                         setsavedata.commit();
                     }
                 }else {
-                    BluetoothSwitch.setChecked(false);
-                    Toast.makeText(getContext(),"안드로이드 13(TIRAMISU)은 본 기능이 지원하지 않습니다.",Toast.LENGTH_SHORT).show();
+                    BluetoothSwitch.setChecked(true);
+                    Toast.makeText(getContext(),"안드로이드 13(TIRAMISU)이상 은 본 기능이 지원하지 않습니다.",Toast.LENGTH_SHORT).show();
                 }
 
 
