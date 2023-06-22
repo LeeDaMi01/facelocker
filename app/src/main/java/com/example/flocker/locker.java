@@ -107,16 +107,16 @@ public class locker extends AppCompatActivity {
 
                     // 1번 사물함 상태 확인
                     if (availableLockers.toString().contains("1")) {
-                        locker_1.setImageResource(R.drawable.full_box);
-                    } else {
                         locker_1.setImageResource(R.drawable.blank_box);
+                    } else {
+                        locker_1.setImageResource(R.drawable.full_box);
                     }
 
                     // 2번 사물함 상태 확인
                     if (availableLockers.toString().contains("2")) {
-                        locker_2.setImageResource(R.drawable.full_box);
-                    } else {
                         locker_2.setImageResource(R.drawable.blank_box);
+                    } else {
+                        locker_2.setImageResource(R.drawable.full_box);
                     }
 
                 } catch (JSONException e) {

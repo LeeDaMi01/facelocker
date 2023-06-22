@@ -212,6 +212,8 @@ public class login extends AppCompatActivity {
                 setsavedata.putString("pw",pw);
                 setsavedata.commit();
 
+                //맥 가져오는 부분 주석처리 한 이유는 안드로이드 12 가 이부분이 오류 생김
+                /*
                 String MAC = getsavedata.getString("MAC","");
                 String check = "";
                 //블루투스가 지원하는지 체크
@@ -239,6 +241,9 @@ public class login extends AppCompatActivity {
                         }
                     }
                 }
+                */
+                // 맥은 여기까지
+
 
                 //전역 프리퍼런스에 id추가
                 PreferenceManager.setInt(login.this, "UserID", Integer.parseInt(id));

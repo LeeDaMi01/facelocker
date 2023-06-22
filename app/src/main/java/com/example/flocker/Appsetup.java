@@ -78,7 +78,7 @@ public class Appsetup {
         this.activity = activity;
 
         //저전력 블루투스 는 확실하게 안드로이드 13 부터 지원하기에 12에는 지원하기도하고 아니기도함
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             lebluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             leBluetoothAdapter = lebluetoothManager.getAdapter();
         } else {
@@ -229,7 +229,11 @@ public class Appsetup {
         if ( Address.equals(error) ) {
             //wifi 가 켜져있고 연결되어있을때 wifi mac 주소 들고옴
             //근데 다른값 가져올 수 도 있음, rnadom wifi mac 도 들고옴
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S_V2){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2){
+                Toast.makeText(context,"설정에 가셔서 블루투스 주소가 맞는지 확인해 주세요.",Toast.LENGTH_SHORT).show();
+            }
+            else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S_V2){
+
                 Address = getMACAddress("wlan0");
 
                 //끝자리를 -1 로 변환하는 과정임
@@ -240,9 +244,6 @@ public class Appsetup {
                     re[re.length - 2] = 'F';
                 }
                 Address.replace(Address.substring(Address.length() - 2), String.valueOf(re));
-                Toast.makeText(context,"설정에 가셔서 블루투스 주소가 맞는지 확인해 주세요.",Toast.LENGTH_SHORT).show();
-            }
-            else {
                 Toast.makeText(context,"설정에 가셔서 블루투스 주소가 맞는지 확인해 주세요.",Toast.LENGTH_SHORT).show();
             }
         }
