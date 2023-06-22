@@ -209,4 +209,19 @@ public class main extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appsetup.BluetoothEnable();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
+        boolean bluetooth_set = getsavedata.getBoolean("bluetooth",false);
+        if (bluetooth_set == false){
+            appsetup.BluetothDisable();
+        }
+    }
 }

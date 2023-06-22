@@ -20,6 +20,8 @@ public class first extends AppCompatActivity {
     //각종 퍼미션 및 블루투스 기능
     private Appsetup appsetup;
 
+    private int logincheck = 0 ;
+
 
     //위치데이터 사용 요청에 이용될것 정의, 0보다 커야하는 정수
     private static final int REQUEST_LOCATION_PERMISSION = 1;
@@ -77,6 +79,8 @@ public class first extends AppCompatActivity {
                 if (resultCode == RESULT_OK){
                     Intent intent = new Intent(getApplicationContext(), main.class);
                     startActivityForResult(intent,2);
+                    //로그인 시도햇을때 꺼지지않게
+                    logincheck = 1;
                     finish();
                 }
                 //로그인화면에서 뒤로가기 버튼눌렀을때 혹은 RESULT_CANCELED값을 반환받았을때
@@ -108,7 +112,8 @@ public class first extends AppCompatActivity {
         //앱 종료시 블루투스 종료가 켜져있다면 블루투스 종료
         getsavedata = getSharedPreferences("savedata",MODE_PRIVATE);
         boolean bluetooth_set = getsavedata.getBoolean("bluetooth",false);
-        if (bluetooth_set == false){
+        if (bluetooth_set == false && logincheck == 0){
+            //로그인 안했을때만 꺼지게
             appsetup.BluetothDisable();
         }
     }
