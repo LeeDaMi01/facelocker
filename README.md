@@ -10,7 +10,7 @@
 6. 회원탈퇴
 
 ## 💡 기술 스택
-+ Andfroid Studio
++ Android Studio
 + MySQL
 
 ## ⏰ 개발 기간
